@@ -9,15 +9,22 @@ firebase.initializeApp({
 });
 
 function logUser() {
-    const responses = firebase.database().ref('/response/');
-    responses.once('value').then((snapshot) => {
-        snapshot.forEach(user => {
-            console.log(user.val());
+    firebase.database().ref('/response/')
+        .once('value')
+        .then((respose) => {
+            respose.forEach(user => console.log(user.val()))
         });
-    });
 }
 
+function addUser(name) {
+    console.log('Add user');
+}
+
+
 function addPresent(name) {
+    if (!name) {
+        return console.error('Second parameter is missing');
+    }
     console.log('Add Present');
     firebase.database().ref('/wishlist')
         .push({
@@ -32,7 +39,7 @@ function addPresent(name) {
 
 const Actions = {
     showUsers: 'showusers',
-    showPresents: 'showpresents',
+    addUser: 'adduser',
     addPresent: 'addpresent',
 };
 
@@ -41,9 +48,6 @@ console.log(`${action} called ${name ? `with ${name}` : null}`);
 switch (action.toLowerCase()) {
     case Actions.showUsers:
         logUser();
-        break;
-    case Actions.showPresents:
-        // showPresents();
         break;
     case Actions.addPresent:
         addPresent(name);

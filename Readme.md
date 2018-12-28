@@ -6,7 +6,7 @@ Add file `serviceAccount.json` as described in https://console.firebase.google.c
 ## How to use it
 Call the `index.js` with on of the following actions
     * `showUser`
-    * `showPresents <name>`
+    * `showUser <name>`
     * `addPresent <name>`
 
 ### See example
