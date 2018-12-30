@@ -1,5 +1,4 @@
 const firebase = require('firebase-admin');
-var Promise = require('promise');
 
 const serviceAccount = require('./serviceAccount.json');
 
