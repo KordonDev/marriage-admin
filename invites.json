@@ -1,0 +1,7 @@
+[{
+        "interalName": "M & F",
+        "persons": [{ "name": "M"}, { "name": "F" }]
+    }, {
+        "interalName": "L & A",
+        "persons": [{ "name": "L", "food": "Vegetarisch"}, { "name": "A" }]
+    }]

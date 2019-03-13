@@ -1,4 +1,5 @@
 const firebase = require('firebase-admin');
+const fs = require('fs');
 
 const serviceAccount = require('./serviceAccount.json');
 
@@ -26,20 +27,12 @@ function logUser() {
 */
 
 function addUser(name) {
-
-    const input = [{
-        interalName: 'M & F',
-        persons: [{ name: 'M'}, { name: 'F' }]
-    }, {
-        interalName: 'L & A',
-        persons: [{ name: 'L', food: 'Vegetarisch'}, { name: 'A' }]
-    }];
-
     const database = firebase.database();
 
+    const invites = JSON.parse(fs.readFileSync('./invites.json'));
 
     console.log(`Add User with internalName ${name}.`);
-    const add = input.map(invite => {
+    const add = invites.map(invite => {
         return database
         .ref('/users')
         .push({
@@ -58,8 +51,6 @@ function addUser(name) {
         ))
         .catch(error => console.error(error))
     });
-
-    console.log(add);
 
     Promise.all(add)
         .then(() => firebase.app().delete());
