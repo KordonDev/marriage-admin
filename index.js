@@ -16,31 +16,52 @@ function logUser() {
         .then(() => firebase.app().delete());
 }
 
+/*
+    Rückgabe:
+    {
+        loginCode": "hochzeit",
+        "key": "-LUzHKiHRmiVcMft",
+        "name": "Hochzeitspaar"
+    }
+*/
+
 function addUser(name) {
 
+    const input = [{
+        interalName: 'M & F',
+        persons: [{ name: 'M'}, { name: 'F' }]
+    }, {
+        interalName: 'L & A',
+        persons: [{ name: 'L', food: 'Vegetarisch'}, { name: 'A' }]
+    }];
+
+    const database = firebase.database();
 
 
-    if (!name) {
-        return console.error('Second parameter is missing');
-    }
     console.log(`Add User with internalName ${name}.`);
-    firebase.database()
+    const add = input.map(invite => {
+        return database
         .ref('/users')
         .push({
-            interalName: name,
+            interalName: invite.interalName,
             responded: false,
             mailUpdate: '',
         })
         .then(ref => ref.child('persons'))
-        .then((ref) => Promise.all([ 'Filipe', 'Marlies' ]
-            .map(name => ref.push({
-                name,
+        .then((ref) => Promise.all(invite.persons
+            .map(person => ref.push({
+                name: person.name,
                 participate: 'Yes',
-                food: 'Meat',
+                food: person.food ? person.food : 'Meat',
                 allergies: '',
             }))
         ))
         .catch(error => console.error(error))
+    });
+
+    console.log(add);
+
+    Promise.all(add)
         .then(() => firebase.app().delete());
 }
 
