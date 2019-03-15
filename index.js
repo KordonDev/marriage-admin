@@ -1,5 +1,6 @@
 const firebase = require('firebase-admin');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const serviceAccount = require('./serviceAccount.json');
 
@@ -8,11 +9,22 @@ firebase.initializeApp({
     databaseURL: 'https://marriage-test.firebaseio.com/'
 });
 
-function logUser() {
-    firebase.database().ref('/response/')
+function createLoginDatabase() {
+    console.log('Creating login database...');
+
+    firebase.database().ref('/users/')
         .once('value')
+        .then(response => response.val())
         .then((respose) => {
-            respose.forEach(user => console.log(user.val()))
+            const inviteKeys = Object.keys(respose);
+            const authKeys = inviteKeys.map(inviteKey => {
+                return {
+                    key: inviteKey,
+                    name: respose[inviteKey].interalName,
+                    loginCode: crypto.randomBytes(4).toString('hex'),
+                }
+            });
+            fs.writeFileSync('./passwd.json', JSON.stringify(authKeys));
         })
         .then(() => firebase.app().delete());
 }
@@ -26,12 +38,12 @@ function logUser() {
     }
 */
 
-function addUser(name) {
+function addUsers() {
     const database = firebase.database();
 
+    console.log(`Add Users from "./invites.json".`);
     const invites = JSON.parse(fs.readFileSync('./invites.json'));
 
-    console.log(`Add User with internalName ${name}.`);
     const add = invites.map(invite => {
         return database
         .ref('/users')
@@ -41,14 +53,18 @@ function addUser(name) {
             mailUpdate: '',
         })
         .then(ref => ref.child('persons'))
-        .then((ref) => Promise.all(invite.persons
+        .then((ref) => {
+            console.log(ref);
+
+        return Promise.all(invite.persons
             .map(person => ref.push({
                 name: person.name,
                 participate: 'Yes',
                 food: person.food ? person.food : 'Meat',
                 allergies: '',
             }))
-        ))
+
+        )})
         .catch(error => console.error(error))
     });
 
@@ -58,18 +74,17 @@ function addUser(name) {
 
 
 const Actions = {
-    showUsers: 'showusers',
-    addUser: 'adduser',
+    createLoginDatabase: 'createlogindatabase',
+    addUsers: 'addusers',
 };
 
 const [ _, __, action, name, ref ] = process.argv;
-console.log(`${action} is called`);
 switch (action.toLowerCase()) {
-    case Actions.showUsers:
-        logUser();
+    case Actions.createLoginDatabase:
+        createLoginDatabase();
         break;
-    case Actions.addUser:
-        addUser(name);
+    case Actions.addUsers:
+        addUsers(name);
         break;
     default:
         console.log('Cases are', Object.keys(Actions).join(', '))

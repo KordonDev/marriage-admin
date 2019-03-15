@@ -81,3 +81,5 @@ typings/
 
 # Firebase login
 serviceAccount.json
+
+passwd.json
