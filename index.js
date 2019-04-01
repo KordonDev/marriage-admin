@@ -6,7 +6,7 @@ const serviceAccount = require('./serviceAccount.json');
 
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
-    databaseURL: 'https://marriage-test.firebaseio.com/'
+    databaseURL: 'https://my-awesome-marriage.firebaseio.com/'
 });
 
 function createLoginDatabase() {
@@ -27,6 +27,23 @@ function createLoginDatabase() {
             fs.writeFileSync('./passwd.json', JSON.stringify(authKeys));
         })
         .then(() => firebase.app().delete());
+}
+
+function addPerson() {
+    const id = '?????';
+    const name = '????';
+
+    firebase.database()
+        .ref(`/users/${id}/persons`)
+        .push({
+                name,
+                participate: 'Yes',
+                food: 'Meat',
+                allergies: '',
+        })
+        .catch(error => console.error(error))
+
+    firebase.app().delete();
 }
 
 /*
@@ -76,6 +93,7 @@ function addUsers() {
 const Actions = {
     createLoginDatabase: 'createlogindatabase',
     addUsers: 'addusers',
+    addPerson: 'addperson',
 };
 
 const [ _, __, action, name, ref ] = process.argv;
@@ -85,6 +103,9 @@ switch (action.toLowerCase()) {
         break;
     case Actions.addUsers:
         addUsers(name);
+        break;
+    case Actions.addPerson:
+        addPerson();
         break;
     default:
         console.log('Cases are', Object.keys(Actions).join(', '))
