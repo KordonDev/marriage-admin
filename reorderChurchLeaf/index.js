@@ -9,11 +9,10 @@ const printOrder = [];
 for(i = 0; i < inputPages / 2; i = i + 2) {
     printOrder.push([inputPages - i - 1, inputPages - i - 1]);
     printOrder.push([i, i]);
-    printOrder.push([inputPages - i - 2, inputPages - i - 2]);
     printOrder.push([i + 1, i + 1]);
+    printOrder.push([inputPages - i - 2, inputPages - i - 2]);
 }
 
-console.log(printOrder);
 pdfWriter.appendPDFPagesFromPDF(inputPath, { type: hummus.eRangeTypeSpecific, specificRanges: printOrder });
-
 pdfWriter.end()
+
