@@ -133,10 +133,10 @@ has-unicode@^2.0.0:
   resolved "https://registry.yarnpkg.com/has-unicode/-/has-unicode-2.0.1.tgz#e0e6fe6a28cf51138855e086d1691e771de2a8b9"
   integrity sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=
 
-hummus@^1.0.104:
-  version "1.0.104"
-  resolved "https://registry.yarnpkg.com/hummus/-/hummus-1.0.104.tgz#3dad5164d50a68c1060806505b3fa02181c61ee6"
-  integrity sha512-dOKbHZeH1egC6cLEggr/93eRE6OdXVfpjqDrhErMIFvIkEwhnihe/oSHVBJiVlabc5WoIexe7TkAL7jeFJP4fg==
+hummus@^1.0.111:
+  version "1.0.111"
+  resolved "https://registry.yarnpkg.com/hummus/-/hummus-1.0.111.tgz#5056ae00e2361152667acc0a87c4cd3f3de3de51"
+  integrity sha512-cy8B7nTYOWBqoLmxjRmB1gfZs1kcVxWnsRjCeQWoLovxWPpWq061R5DWWJQ8k/qj8ix4go160sJriqOvkPRCng==
   dependencies:
     node-pre-gyp "^0.10.0"
 
